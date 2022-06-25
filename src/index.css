@@ -1,13 +1,113 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css?family=Montserrat:normal,bold');
+@import url('https://fonts.googleapis.com/css?family=Roboto:normal,bold');
+
+:root {
+  --main-color: #4A69BD;
+  --blue2-color: #2C4CA2;
+  --white-color: #FFFFFF;
+  --white2-color: #F6F7F8;
+  --orange-color: #FF8119;
+  --orange2-color: #b85d12;
+  --glay-color: #707070;
+
+  --px12-font: normal normal normal calc(0.3em + 0.6vh) 'Montserrat';
+  --px15_19-font: normal normal normal calc(0.3em + 1vh) 'Montserrat';
+  --px15_19_Bold-font: normal bold normal calc(0.3em + 1vh) 'Montserrat';
+  --px15_20-font: normal normal normal calc(0.3em + 1.5vh) 'Montserrat';
+  --px20_24_Bold-font: normal bold normal calc(0.3em + 2vh) 'Montserrat';
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body{
+  background-color: var( --white2-color)!important;
+  font: var(--px15_19-font)!important;
 }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.form-control.is-valid,
+.was-validated .form-control:valid {
+  background-image: none !important;
+}
+
+.form-control.is-invalid,
+.was-validated .form-control:invalid {
+  background-image: none !important;
+  
+}
+
+.invalid-feedback{
+  font: var(--px12-font) !important;
+}
+
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+
+.inputStyleDefault {
+  height: 5vh !important;
+  border-radius:0!important;
+  min-height: calc(1.5em + 1rem + 2px);
+}
+
+.inputStyleDefault:not(:placeholder-shown) {
+  font: var(--px15_19-font);
+  color: #1E1E1E;
+}
+
+.inputStyleDefault:placeholder-shown {
+  font: var(--px12-font);
+}
+
+.buttonBlue {
+  background: var(--main-color) 0% 0% no-repeat padding-box !important;
+  opacity: 1;
+  width: 100%;
+  height: 6vh;
+  border: none !important;
+  font: var(--px15_19_Bold-font) !important;
+}
+
+.buttonBlue:hover {
+  background: var(--blue2-color) 0% 0% no-repeat padding-box !important;
+}
+
+.buttonWhite {
+  background: var(--white-color) 0% 0% no-repeat padding-box !important;
+  border: 1px solid var(--main-color) !important;
+  opacity: 1 !important;
+  width: 100%;
+  height: 6vh;
+  text-decoration: none;
+  color: var(--main-color) !important;
+  font: var(--px15_19_Bold-font) !important;
+}
+
+.buttonWhite:hover {
+  background: #D8E2FF 0% 0% no-repeat padding-box !important;
+}
+
+.buttonOrange {
+  background: var(--orange-color) 0% 0% no-repeat padding-box !important;
+  opacity: 1;
+  width: 100%;
+  height: 6vh;
+  border: none !important;
+  font: var(--px15_19_Bold-font) !important;
+}
+
+.buttonOrange:hover {
+  background: var(--orange2-color) 0% 0% no-repeat padding-box !important;
+}
+
