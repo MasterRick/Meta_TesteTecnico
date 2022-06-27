@@ -72,28 +72,28 @@ const PageInfoPayer: FC<PropsType> = (props) => {
                                 currentCoin === "US$" ?
                                     <>
                                         <Col sm={3} md={2} xl={2} className="mb-3" >
-                                            <img src='./brl.svg' width="30vw" />
+                                            <img src='./brl.svg' alt="bandeira do brasil" width="30vw" />
                       &nbsp;R$ {currentValueOfPayment != null && (currentCurrency * currentValueOfPayment).toFixed(1)} &nbsp;
                     </Col>
                                         <Col sm={3} md={2} xl={2} className="mb-3" >
-                                            <img src='./eua.svg' width="30vw" />
+                                            <img src='./eua.svg' alt="bandeira dos estados unidos" width="30vw" />
                     &nbsp;US$ {currentValueOfPayment != null && currentValueOfPayment.toFixed(1)} &nbsp;
                 </Col>
                                     </>
                                     : currentCoin === "€" ?
                                         <>
                                             <Col sm={2} md={2} xl={2} className="mb-3" >
-                                                <img src='./brl.svg' width="30vw" />
+                                                <img src='./brl.svg' alt="bandeira do brasil" width="30vw" />
                       &nbsp;R$ {currentValueOfPayment != null && (currentCurrency * currentValueOfPayment).toFixed(1)} &nbsp;
                     </Col>
                                             <Col sm={2} md={2} xl={2} className="mb-3" >
-                                                <img src='./eu.svg' width="30vw" />
+                                                <img src='./eu.svg' alt="bandeira da união europeia" width="30vw" />
                        &nbsp;€ {currentValueOfPayment != null && currentValueOfPayment.toFixed(1)} &nbsp;
                       </Col>
                                         </>
                                         :
                                         <Col sm={2} md={2} xl={2} className="mb-3" >
-                                            <img src='./brl.svg' width="30vw" />
+                                            <img src='./brl.svg' alt="bandeira do brasil" width="30vw" />
                       &nbsp;R$ {currentValueOfPayment != null && currentValueOfPayment.toFixed(1)} &nbsp;
                     </Col>
                             }

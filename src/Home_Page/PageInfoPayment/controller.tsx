@@ -141,7 +141,7 @@ export class PageInfoPaymentController implements PageInfoPaymentInterface {
     submitForm2 = (values, errors) => {
         this.setInformations({
             ...this.informations, payment: {
-                type: this.currentOptionOfPayment == "1" ? 'Boleto' : 'PIX',
+                type: this.currentOptionOfPayment === "1" ? 'Boleto' : 'PIX',
                 info: {
                     cpf: values.cpfNumber
                 },
