@@ -7,12 +7,13 @@ import PageInfoPayer from './PageInfoPayer/index'
 import PageInfoPayment from './PageInfoPayment/index'
 import PageSucessPayment from './PageSucessPayment/index'
 
+import Context from '../Context'
 
-import Context from './context'
+import { HomeController } from './controller'
 
 const Home = () => {
 
-  const [stage, setStage] = useState(0);
+  const [,setStage] = useState(0);
 
   const [currentValueOfPayment, setCurrentValueOfPayment] = useState(0);
   const [currentCoin, setCurrentCoin] = useState("R$");
@@ -37,43 +38,7 @@ const Home = () => {
 
   const stageDOM = [useRef<HTMLFormElement>(null), useRef<HTMLFormElement>(null), useRef<HTMLFormElement>(null), useRef<HTMLFormElement>(null)];
 
-  const clickNextStage = () => {
-    setStage(stage + 1);
-
-    for (let i = 0; i < stageDOM.length; i++) {
-      let aux = stageDOM[i].current;
-      if (aux !== null)
-        aux.style.display = "none";
-    }
-
-    setStage((state) => {
-      let aux = stageDOM[state].current;
-      if (aux !== null)
-        aux.style.display = "block";
-
-      return state;
-    });
-  }
-
-  const clickPreviousStage = () => {
-    setStage(stage - 1);
-
-    for (let i = 0; i < stageDOM.length; i++) {
-      let aux = stageDOM[i].current;
-      if (aux !== null)
-        aux.style.display = "none";
-    }
-
-    setStage((state) => {
-
-      let aux = stageDOM[state].current;
-      if (aux !== null)
-        aux.style.display = "block";
-
-      return state;
-    });
-
-  }
+  const HomeControllerConst = new HomeController(setStage, stageDOM);
 
   return (
     <Context.Provider value={{
@@ -86,9 +51,9 @@ const Home = () => {
       setCurrentCoin: setCurrentCoin
     }}>
       <Container>
-        <PageInfoValueOfPayment clickNextStage={clickNextStage} ></PageInfoValueOfPayment>
-        <PageInfoPayer clickNextStage={clickNextStage} clickPreviousStage={clickPreviousStage} ></PageInfoPayer>
-        <PageInfoPayment clickNextStage={clickNextStage} clickPreviousStage={clickPreviousStage} ></PageInfoPayment>
+        <PageInfoValueOfPayment clickNextStage={HomeControllerConst.clickNextStage} ></PageInfoValueOfPayment>
+        <PageInfoPayer clickNextStage={HomeControllerConst.clickNextStage} clickPreviousStage={HomeControllerConst.clickPreviousStage} ></PageInfoPayer>
+        <PageInfoPayment clickNextStage={HomeControllerConst.clickNextStage} clickPreviousStage={HomeControllerConst.clickPreviousStage} ></PageInfoPayment>
         <PageSucessPayment></PageSucessPayment>
       </Container>
     </Context.Provider>

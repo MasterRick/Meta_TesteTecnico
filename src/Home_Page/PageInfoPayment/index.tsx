@@ -1,6 +1,4 @@
-import React, { useState, useContext } from 'react';
-
-import Styles from './../Home.module.css';
+import React, { useState, useContext, FC } from 'react';
 
 import { Formik } from 'formik';
 import InputMask from 'react-input-mask';
@@ -12,50 +10,15 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 
-import Context from '../context'
+import RadioButtons from './components/RadioButtons'
+import Context from '../../Context'
 
-const RadioButtons = (props) => {
-    return (
-        <>
-            <Row className={`${Styles.textFontBlue} mx-2`}>
-                <Col>Informe os dados do pagamento</Col>
-            </Row>
-            <Row className={`${Styles.textFontGlay} mx-2`}>
-                <Col>
-                    <InputGroup className="d-flex justify-content-center align-content-center" onChange={(e) => { props.setCurrentOptionOfPayment((e.target as HTMLInputElement).id) }}>
-                        <Form.Check
-                            inline
-                            label="Cartão"
-                            name="group1"
-                            type="radio"
-                            id="0"
-                            defaultChecked={true}
-                        />
-                        <Form.Check
-                            inline
-                            label="Boleto"
-                            name="group1"
-                            type="radio"
-                            id="1"
-                        />
-                        <Form.Check
-                            inline
-                            label="PIX"
-                            name="group1"
-                            type="radio"
-                            id="2"
-                        />
-                    </InputGroup >
-                </Col>
-            </Row>
-        </>
-    );
-}
+import { PageInfoPaymentController } from './controller'
 
-const PageInfoPayment = (props) => {
+import { PropsType } from './model'
+
+const PageInfoPayment: FC<PropsType> = (props) => {
     const [currentOptionOfPayment, setCurrentOptionOfPayment] = useState("0");
-
-
 
     const [showFeedbacks, setShowFeedbacks] = useState({
         cardName: false,
@@ -65,9 +28,9 @@ const PageInfoPayment = (props) => {
         cpfNumber: false,
     });
 
-    const { refValue, currentValueOfPayment, informations, setInformations } = useContext(Context);
+    const { refValue, informations, setInformations } = useContext(Context);
 
-    console.log(informations);
+    const PageInfoPaymentControllerConst = new PageInfoPaymentController(setShowFeedbacks, informations, setInformations, props.clickNextStage, currentOptionOfPayment);
 
     if (currentOptionOfPayment === '0') {
         return (
@@ -78,114 +41,23 @@ const PageInfoPayment = (props) => {
                     cardExpiration: '',
                     cardCVC: '',
                 }}
-                validate={async (values) => {
-                    let errors = {};
+                validate={PageInfoPaymentControllerConst.validadeForm}
 
-                    if (!values.cardName) {
-                        errors['cardName'] = 'Coloque o nome do titular';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardName: true };
-                        });
-                    } else {
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardName: false };
-                        });
-                    }
-
-                    if (!values.cardNumber) {
-                        errors['cardNumber'] = 'Coloque o número do cartão';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardNumber: true };
-                        });
-                    }
-
-                    else if (values.cardNumber.length < 19) {
-                        errors['cardNumber'] = 'Número do cartão inválido';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardNumber: true };
-                        });
-                    }
-
-                    else {
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardNumber: false };
-                        });
-                    }
-
-                    if (!values.cardExpiration) {
-                        errors['cardExpiration'] = 'Coloque a validade do cartão';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardExpiration: true };
-                        });
-                    }
-
-                    else if (values.cardExpiration.length < 5) {
-                        errors['cardExpiration'] = 'Validade inválida';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardExpiration: true };
-                        });
-                    }
-
-                    else {
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardExpiration: false };
-                        });
-                    }
-
-                    if (!values.cardCVC) {
-                        errors['cardCVC'] = 'Coloque o CVC';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardCVC: true };
-                        });
-                    }
-
-                    else if (values.cardCVC.length < 3) {
-                        errors['cardCVC'] = 'CVC inválido';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardCVC: true };
-                        });
-                    }
-
-                    else {
-                        setShowFeedbacks((state) => {
-                            return { ...state, cardCVC: false };
-                        });
-                    }
-
-                    return errors;
-                }}
-
-                onSubmit={(values, errors) => {
-                    setInformations({
-                        ...informations, payment: {
-                            type: 'Cartão',
-                            info: {
-                                cardName: values.cardName,
-                                cardNumber: values.cardNumber,
-                                cardExpiration: values.cardExpiration,
-                                cardCVC: values.cardCVC,
-                            },
-                            valueOfPaymentBRL: informations.payment.valueOfPaymentBRL,
-                        }
-                    });
-                    props.clickNextStage();
-                }}
+                onSubmit={PageInfoPaymentControllerConst.submitForm}
             >
                 {({
                     values,
                     errors,
-                    touched,
                     handleChange,
                     handleBlur,
                     handleSubmit,
-                    isSubmitting,
 
                 }) => (
                     <Form onSubmit={handleSubmit} noValidate validated={false} ref={refValue[2]} style={{ display: 'none' }}>
                         <Row className="d-flex justify-content-center align-content-center" style={{ height: '100vh' }}>
                             <Col sm={9} md={6} xl={6} className="shadow" style={{ backgroundColor: 'white', borderRadius: '1.5rem' }}>
-                                <RadioButtons setCurrentOptionOfPayment={setCurrentOptionOfPayment}> </RadioButtons>
-                                <Row className={`${Styles.textFontGlay} mx-2`}>
+                                <RadioButtons setCurrentOptionOfPayment={setCurrentOptionOfPayment} />
+                                <Row className={`textFontGlay mx-2`}>
                                     <Col >
                                         <Form.Label htmlFor="basic-url">Nome do titular</Form.Label>
                                         <InputGroup>
@@ -207,7 +79,7 @@ const PageInfoPayment = (props) => {
                                         </InputGroup>
                                     </Col>
                                 </Row>
-                                <Row className={`${Styles.textFontGlay} mx-2`}>
+                                <Row className={`textFontGlay mx-2`}>
                                     <Col md={8}>
                                         <Form.Label htmlFor="basic-url">Numero do Cartão</Form.Label>
                                         <InputMask mask="9999 9999 9999 9999" maskChar="" value={values.cardNumber} onChange={handleChange}>
@@ -296,56 +168,23 @@ const PageInfoPayment = (props) => {
                 initialValues={{
                     cpfNumber: '',
                 }}
-                validate={async (values) => {
-                    let errors = {};
+                validate={PageInfoPaymentControllerConst.validadeForm2}
 
-                    if (!values.cpfNumber) {
-                        errors['cpfNumber'] = 'Coloque seu CPF';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cpfNumber: true };
-                        });
-                    } else if (values.cpfNumber.length < 14) {
-                        errors['cpfNumber'] = 'CPF inválido';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cpfNumber: true };
-                        });
-                    }
-                    else {
-                        setShowFeedbacks((state) => {
-                            return { ...state, cpfNumber: false };
-                        });
-                    }
-                    return errors;
-                }}
-
-                onSubmit={(values, errors) => {
-                    setInformations({
-                        ...informations, payment: {
-                            type: currentOptionOfPayment == "1" ? 'Boleto' : 'PIX',
-                            info: {
-                                cpf: values.cpfNumber
-                            },
-                            valueOfPaymentBRL: informations.payment.valueOfPaymentBRL,
-                        }
-                    });
-                    props.clickNextStage();
-                }}
+                onSubmit={PageInfoPaymentControllerConst.submitForm2}
             >
                 {({
                     values,
                     errors,
-                    touched,
                     handleChange,
                     handleBlur,
                     handleSubmit,
-                    isSubmitting,
 
                 }) => (
                     <Form onSubmit={handleSubmit} noValidate validated={false} ref={refValue[2]} style={{ display: 'none' }}>
                         <Row className="d-flex justify-content-center align-content-center" style={{ height: '100vh' }}>
                             <Col sm={9} md={6} xl={6} className="shadow" style={{ backgroundColor: 'white', borderRadius: '1.5rem' }}>
-                                <RadioButtons setCurrentOptionOfPayment={setCurrentOptionOfPayment}> </RadioButtons>
-                                <Row className={`${Styles.textFontGlay} mx-2`}>
+                                <RadioButtons setCurrentOptionOfPayment={setCurrentOptionOfPayment} />
+                                <Row className={`textFontGlay mx-2`}>
                                     <Col>
                                         <Form.Label htmlFor="basic-url">CPF</Form.Label>
                                         <InputMask mask="999.999.999-99" maskChar="" value={values.cpfNumber} onChange={handleChange}>

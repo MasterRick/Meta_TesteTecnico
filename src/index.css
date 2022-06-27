@@ -3,6 +3,7 @@
 
 :root {
   --main-color: #4A69BD;
+  --blue-color: #0C2461;
   --blue2-color: #2C4CA2;
   --white-color: #FFFFFF;
   --white2-color: #F6F7F8;
@@ -22,14 +23,12 @@ body{
   font: var(--px15_19-font)!important;
 }
 
-/* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
 }
@@ -52,6 +51,21 @@ input[type=number] {
 .nopadding {
   padding: 0 !important;
   margin: 0 !important;
+}
+
+.textFontBlue {
+  text-align: left;
+  font: var(--px20_24_Bold-font) !important;
+  color: var( --blue-color) !important;
+  margin-bottom: 3vh!important;
+  margin-top: 3vh!important;
+}
+
+.textFontGlay {
+  text-align: left;
+  font: var( --px15_20-font) !important;
+  color:var(--glay-color) !important;
+  margin-bottom: 3vh!important;
 }
 
 

@@ -1,6 +1,4 @@
-import React, { useState, useContext } from 'react';
-
-import Styles from './../Home.module.css';
+import React, { useState, useContext, FC } from 'react';
 
 import { Formik } from 'formik';
 import InputMask from 'react-input-mask';
@@ -12,12 +10,13 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 
-import CurrencyAPI from '../../Currency_Api/api';
-import AddressAPI from '../../Address_Api/api';
+import Context from '../../Context'
 
-import Context from '../context'
+import { PropsType } from './model'
+import { PageInfoPayerController } from './controller'
 
-const PageInfoPayer = (props) => {
+
+const PageInfoPayer: FC<PropsType> = (props) => {
     const [currentCurrency, setCurrentCurrency] = useState(1);
 
     const [showFeedbacks, setShowFeedbacks] = useState({
@@ -30,57 +29,15 @@ const PageInfoPayer = (props) => {
 
     const { refValue, currentValueOfPayment, currentCoin, informations, setInformations } = useContext(Context);
 
-    const getCurrencyInformations = async (params) => {
-        //setIsLoading(true);
-        await CurrencyAPI.get(`/latest/currencies/${params}.json`).then((response) => {
-            return response;
-        }).then(data => {
-            setCurrentCurrency(data.data[params].brl);
-            //setIsLoading(false);
-        }).catch((error) => {
-            console.log(error.response);
-        });
-    }
+    const PageInfoPayerControllerConst = new PageInfoPayerController(setShowFeedbacks, informations, setInformations, currentCurrency, currentValueOfPayment, props.clickNextStage);
 
-    const getAddressInformations = async (params) => {
-        //setIsLoading(true);
-        return await AddressAPI.get(`/${params}/json`).then((response) => {
-            return response;
-        }).then(data => {
-
-            if (data.data.erro === "true") {
-                setShowFeedbacks((state) => {
-                    return { ...state, cep: true };
-                });
-                return true;
-            } else {
-                setInformations(
-                    { ...informations, cep: data.data.cep, city: data.data.localidade, state: data.data.uf, address: data.data.logradouro }
-                );
-
-                setShowFeedbacks((state) => {
-                    return { ...state, cep: false };
-                });
-                return false;
-            }
-
-            //setIsLoading(false);
-        }).catch((error) => {
-            setShowFeedbacks((state) => {
-                console.log(state);
-                return { ...state, cep: true };
-            });
-            setInformations({ ...informations, cep: '', city: '', state: '', address: '', complement: '' });
-            return true;
-        });
-    }
 
     switch (currentCoin) {
         case "US$":
-            getCurrencyInformations("usd");
+            PageInfoPayerControllerConst.GetCurrencyInformations("usd", setCurrentCurrency);
             break;
         case "€":
-            getCurrencyInformations("eur");
+            PageInfoPayerControllerConst.GetCurrencyInformations("eur", setCurrentCurrency);
             break;
         default:
             break;
@@ -96,95 +53,16 @@ const PageInfoPayer = (props) => {
                 number: '',
                 complement: '',
             }}
-            validate={async (values) => {
-                let errors = {};
+            validate={PageInfoPayerControllerConst.validadeForm}
 
-                if (!values.name) {
-                    errors['name'] = 'Coloque seu nome';
-                    setShowFeedbacks((state) => {
-                        return { ...state, name: true };
-                    });
-                } else {
-                    setShowFeedbacks((state) => {
-                        return { ...state, name: false };
-                    });
-                }
-
-                if (!values.email) {
-                    errors['email'] = 'Coloque seu email';
-                    setShowFeedbacks((state) => {
-                        return { ...state, email: true };
-                    });
-                } else if (
-                    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-                ) {
-                    errors['email'] = 'Insira um endereço de email válido';
-                    setShowFeedbacks((state) => {
-                        return { ...state, email: true };
-                    });
-                } else {
-                    setShowFeedbacks((state) => {
-                        return { ...state, email: false };
-                    });
-                }
-
-
-                if (!values.cep) {
-                    errors['cep'] = 'Coloque seu CEP';
-                    setShowFeedbacks((state) => {
-                        return { ...state, cep: true };
-                    });
-                    setInformations({ ...informations, city: '', state: '', address: '', complement: '', number: '' });
-                } else if (values.cep.length < 9) {
-                    errors['cep'] = 'CEP inválido';
-                    setShowFeedbacks((state) => {
-                        return { ...state, cep: true };
-                    });
-                    setInformations({ ...informations, city: '', state: '', address: '', complement: '', number: '' });
-                }
-                else {
-                    const testRequest = await getAddressInformations(values.cep.replace("-", "").trim());
-
-                    if (testRequest) {
-                        errors['cep'] = 'CEP inválido';
-                        setShowFeedbacks((state) => {
-                            return { ...state, cep: true };
-                        });
-                    }
-                }
-
-                if (!values.number) {
-                    errors['number'] = 'Sem número';
-                    setShowFeedbacks((state) => {
-                        return { ...state, number: true };
-                    });
-                } else {
-                    setShowFeedbacks((state) => {
-                        return { ...state, number: false };
-                    });
-                }
-                return errors;
-            }}
-
-            onSubmit={(values, errors) => {
-                setInformations({
-                    ...informations, name: values.name, email: values.email, cep: values.cep, complement: values.complement, number: values.number, payment: {
-                        type: '',
-                        info: {},
-                        valueOfPaymentBRL: currentCurrency * currentValueOfPayment,
-                    }
-                });
-                props.clickNextStage();
-            }}
+            onSubmit={PageInfoPayerControllerConst.submitForm}
         >
             {({
                 values,
                 errors,
-                touched,
                 handleChange,
                 handleBlur,
                 handleSubmit,
-                isSubmitting,
 
             }) => (
                 <Form onSubmit={handleSubmit} noValidate validated={false} ref={refValue[1]} style={{ display: 'none' }}>
@@ -221,10 +99,10 @@ const PageInfoPayer = (props) => {
                             }
                         </Row>
                         <Col sm={9} md={6} xl={6} className="shadow" style={{ backgroundColor: 'white', borderRadius: '1.5rem' }}>
-                            <Row className={`${Styles.textFontBlue} mx-2`}>
+                            <Row className={`textFontBlue mx-2`}>
                                 <Col>Informe seus dados</Col>
                             </Row>
-                            <Row className={`${Styles.textFontGlay} mx-2`}>
+                            <Row className={`textFontGlay mx-2`}>
                                 <Col >
                                     <Form.Label htmlFor="basic-url">Nome</Form.Label>
                                     <InputGroup>
@@ -266,7 +144,7 @@ const PageInfoPayer = (props) => {
                                     </InputGroup>
                                 </Col>
                             </Row>
-                            <Row className={`${Styles.textFontGlay} mx-2`}>
+                            <Row className={`textFontGlay mx-2`}>
                                 <Col >
                                     <Form.Label htmlFor="basic-url">CEP</Form.Label>
                                     <InputMask mask="99999-999" maskChar="" value={values.cep} onChange={handleChange}>
@@ -318,7 +196,7 @@ const PageInfoPayer = (props) => {
                                     </InputGroup>
                                 </Col>
                             </Row>
-                            <Row className={`${Styles.textFontGlay} mx-2`}>
+                            <Row className={`textFontGlay mx-2`}>
                                 <Col>
                                     <Form.Label htmlFor="basic-url">Endereço</Form.Label>
                                     <InputGroup>
@@ -354,7 +232,7 @@ const PageInfoPayer = (props) => {
 
                                 </Col>
                             </Row>
-                            <Row className={`${Styles.textFontGlay} mx-2`}>
+                            <Row className={`textFontGlay mx-2`}>
                                 <Col>
                                     <Form.Label htmlFor="basic-url">Complemento</Form.Label>
                                     <InputGroup>

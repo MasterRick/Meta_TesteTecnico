@@ -1,6 +1,4 @@
-import React, { useState, useContext } from 'react';
-
-import Styles from './../Home.module.css';
+import React, { useState, useContext, FC } from 'react';
 
 import { Formik } from 'formik';
 import Row from 'react-bootstrap/Row';
@@ -10,14 +8,20 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 
-import Context from "../context";
+import Context from "../../Context";
 
-const PageInfoValueOfPayment = (props) => {
+import { PageInfoValueOfPaymentController } from './controller'
+
+import { PropsType } from './model'
+
+const PageInfoValueOfPayment: FC<PropsType> = (props) => {
     const [showFeedbacks, setShowFeedbacks] = useState({
         valueOfPayment: false,
     });
 
     const { refValue, setCurrentValueOfPayment, currentCoin, setCurrentCoin } = useContext(Context);
+
+    const PageInfoValueOfPaymentConst = new PageInfoValueOfPaymentController(setShowFeedbacks, setCurrentValueOfPayment, props.clickNextStage);
 
     const changeCoin = (e) => {
 
@@ -39,30 +43,9 @@ const PageInfoValueOfPayment = (props) => {
     return (
         <Formik
             initialValues={{ valueOfPayment: 0 }}
-            validate={values => {
-                let errors = {};
+            validate={PageInfoValueOfPaymentConst.validadeForm}
 
-                if (values.valueOfPayment.toString().length > 0) {
-                    setCurrentValueOfPayment(values.valueOfPayment);
-                }
-
-                if (values.valueOfPayment <= 0) {
-                    errors['valueOfPayment'] = 'Valor para o pagamento deve ser maior que 0';
-                    setShowFeedbacks({ ...showFeedbacks, valueOfPayment: true });
-                }
-                else if (values.valueOfPayment.toString().length > 6) {
-                    errors['valueOfPayment'] = 'Valor muito alto';
-                    setShowFeedbacks({ ...showFeedbacks, valueOfPayment: true });
-                }
-                else {
-                    setShowFeedbacks({ ...showFeedbacks, valueOfPayment: false });
-                }
-                return errors;
-            }}
-
-            onSubmit={(values, errors) => {
-                props.clickNextStage();
-            }}
+            onSubmit={PageInfoValueOfPaymentConst.submitForm}
         >
             {({
                 values,
@@ -77,10 +60,10 @@ const PageInfoValueOfPayment = (props) => {
                 <Form onSubmit={handleSubmit} noValidate validated={false} ref={refValue[0]}>
                     <Row className="d-flex justify-content-center align-content-center" style={{ height: '100vh' }}>
                         <Col sm={9} md={6} xl={6} className="shadow" style={{ backgroundColor: 'white', borderRadius: '1.5rem' }}>
-                            <Row className={`${Styles.textFontBlue} mx-2`}>
+                            <Row className={`textFontBlue mx-2`}>
                                 <Col>Informe o valor do pagamento</Col>
                             </Row>
-                            <Row className={`${Styles.textFontGlay} mx-2`}>
+                            <Row className={`textFontGlay mx-2`}>
                                 <Form.Label>Valor</Form.Label>
                                 <InputGroup>
                                     <Col sm={1} md={2} xl={1}>
