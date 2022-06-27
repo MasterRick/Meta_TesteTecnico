@@ -52,7 +52,7 @@ export class PageInfoPayerController implements PageInfoPayerControllerInterface
                 return true;
             } else {
                 this.setInformations(
-                    { ... this.informations, cep: data.data.cep, city: data.data.localidade, state: data.data.uf, address: data.data.logradouro }
+                    { ...this.informations, cep: data.data.cep, city: data.data.localidade, state: data.data.uf, address: data.data.logradouro }
                 );
 
                 this.setShowFeedbacks((state) => {
@@ -67,7 +67,7 @@ export class PageInfoPayerController implements PageInfoPayerControllerInterface
                 console.log(state);
                 return { ...state, cep: true };
             });
-            this.setInformations({ ... this.informations, cep: '', city: '', state: '', address: '', complement: '' });
+            this.setInformations({ ...this.informations, cep: '', city: '', state: '', address: '', complement: '' });
             return true;
         });
     }

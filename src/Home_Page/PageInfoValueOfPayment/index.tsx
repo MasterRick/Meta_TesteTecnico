@@ -14,7 +14,7 @@ import { PageInfoValueOfPaymentController } from './controller'
 
 import { PropsType } from './model'
 
-const PageInfoValueOfPayment: FC<PropsType> = (props) => {
+const PageInfoValueOfPayment:FC<PropsType> = (props) => {
     const [showFeedbacks, setShowFeedbacks] = useState({
         valueOfPayment: false,
     });

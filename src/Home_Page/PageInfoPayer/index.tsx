@@ -16,7 +16,7 @@ import { PropsType } from './model'
 import { PageInfoPayerController } from './controller'
 
 
-const PageInfoPayer: FC<PropsType> = (props) => {
+const PageInfoPayer:FC<PropsType> = (props) => {
     const [currentCurrency, setCurrentCurrency] = useState(1);
 
     const [showFeedbacks, setShowFeedbacks] = useState({

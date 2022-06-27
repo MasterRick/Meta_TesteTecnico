@@ -2,8 +2,6 @@
 import { Dispatch } from 'react'
 
 import { PageInfoValueOfPaymentInterface, showFeedbacksType } from './model'
-import { InformationsType } from '../../Context/model'
-
 
 export class PageInfoValueOfPaymentController implements PageInfoValueOfPaymentInterface {
 

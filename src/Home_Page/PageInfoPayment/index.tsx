@@ -17,7 +17,7 @@ import { PageInfoPaymentController } from './controller'
 
 import { PropsType } from './model'
 
-const PageInfoPayment: FC<PropsType> = (props) => {
+const PageInfoPayment:FC<PropsType> = (props) => {
     const [currentOptionOfPayment, setCurrentOptionOfPayment] = useState("0");
 
     const [showFeedbacks, setShowFeedbacks] = useState({
