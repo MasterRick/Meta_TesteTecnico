@@ -13,7 +13,7 @@ import { HomeController } from './controller'
 
 const Home = () => {
 
-  const [,setStage] = useState(0);
+  const [, setStage] = useState(0);
 
   const [currentValueOfPayment, setCurrentValueOfPayment] = useState(0);
   const [currentCoin, setCurrentCoin] = useState("R$");
@@ -30,9 +30,8 @@ const Home = () => {
     payment: {
       type: '',
       info: {
-
-      },
-      valueOfPaymentBRL: 0,
+        valueOfPaymentBRL: 0
+      }
     }
   });
 

@@ -44,7 +44,7 @@ const PageSucessPayment = () => {
                         <Col><b>TIPO: </b>{informations.payment.type}</Col>
                     </Row>
                     <Row className={`textFontGlay mx-2`}>
-                        <Col><b>Valor:R$ </b>{informations.payment.valueOfPaymentBRL.toFixed(1)}</Col>
+                        <Col><b>Valor:R$ </b>{informations.payment.info.valueOfPaymentBRL.toFixed(1)}</Col>
                     </Row>
                     {
                         informations.payment.type === "Cartão" ?

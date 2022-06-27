@@ -16,9 +16,9 @@ export default createContext<ContextType>({
         payment: {
             type: '',
             info: {
-
+                valueOfPaymentBRL: 0
             },
-            valueOfPaymentBRL: 0,
+           
         }
     },
     setInformations: () => { },

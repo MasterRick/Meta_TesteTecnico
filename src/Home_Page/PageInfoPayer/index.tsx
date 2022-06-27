@@ -31,7 +31,6 @@ const PageInfoPayer:FC<PropsType> = (props) => {
 
     const PageInfoPayerControllerConst = new PageInfoPayerController(setShowFeedbacks, informations, setInformations, currentCurrency, currentValueOfPayment, props.clickNextStage);
 
-
     switch (currentCoin) {
         case "US$":
             PageInfoPayerControllerConst.GetCurrencyInformations("usd", setCurrentCurrency);

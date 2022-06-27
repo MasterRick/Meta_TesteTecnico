@@ -13,12 +13,13 @@ export type InformationsType = {
         type: string,
         info: {
             cpf?: string,
-            cardName?: string
-            cardNumber?: string
-            cardExpiration?: string
-            cardCVC?: string
+            cardName?: string,
+            cardNumber?: string,
+            cardExpiration?: string,
+            cardCVC?: string,
+            valueOfPaymentBRL: number,
         },
-        valueOfPaymentBRL: number,
+        
     }
 
 

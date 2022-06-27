@@ -109,8 +109,8 @@ export class PageInfoPaymentController implements PageInfoPaymentInterface {
                     cardNumber: values.cardNumber,
                     cardExpiration: values.cardExpiration,
                     cardCVC: values.cardCVC,
+                    valueOfPaymentBRL: this.informations.payment.info.valueOfPaymentBRL,
                 },
-                valueOfPaymentBRL: this.informations.payment.valueOfPaymentBRL,
             }
         });
         this.clickNextStage();
@@ -143,9 +143,10 @@ export class PageInfoPaymentController implements PageInfoPaymentInterface {
             ...this.informations, payment: {
                 type: this.currentOptionOfPayment === "1" ? 'Boleto' : 'PIX',
                 info: {
-                    cpf: values.cpfNumber
+                    cpf: values.cpfNumber,
+                    valueOfPaymentBRL: this.informations.payment.info.valueOfPaymentBRL,
                 },
-                valueOfPaymentBRL: this.informations.payment.valueOfPaymentBRL,
+               
             }
         });
         this.clickNextStage();

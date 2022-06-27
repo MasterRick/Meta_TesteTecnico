@@ -146,8 +146,9 @@ export class PageInfoPayerController implements PageInfoPayerControllerInterface
         this.setInformations({
             ...this.informations, name: values.name, email: values.email, cep: values.cep, complement: values.complement, number: values.number, payment: {
                 type: '',
-                info: {},
-                valueOfPaymentBRL: this.currentCurrency * this.currentValueOfPayment,
+                info: {
+                    valueOfPaymentBRL: this.currentCurrency * this.currentValueOfPayment
+                }
             }
         });
         this.clickNextStage();
